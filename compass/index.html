@@ -194,6 +194,13 @@ nav {
   letter-spacing: -0.01em;
 }
 
+.required-note {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-faint);
+  letter-spacing: 0;
+}
+
 .contact-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -647,17 +654,17 @@ footer {
     <!-- ── CONTACT CAPTURE ── -->
     <div class="contact-strip fade">
       <div class="contact-inner">
-        <div class="contact-section-title">About you</div>
+        <div class="contact-section-title">About you <span class="required-note">— name &amp; email required</span></div>
         <div class="contact-row">
           <div class="contact-field">
-            <input type="text" id="field-name" name="contact_name" placeholder="First name" required autocomplete="given-name">
+            <input type="text" id="field-name" name="contact_name" placeholder="First name *" required autocomplete="given-name">
           </div>
           <div class="contact-field">
             <input type="text" name="contact_lastname" placeholder="Last name" autocomplete="family-name">
           </div>
         </div>
         <div class="contact-field">
-          <input type="email" id="field-email" name="contact_email" placeholder="Email" required autocomplete="email">
+          <input type="email" id="field-email" name="contact_email" placeholder="Email *" required autocomplete="email">
           <input type="hidden" name="_replyto" id="field-replyto">
         </div>
         <div class="contact-field">
