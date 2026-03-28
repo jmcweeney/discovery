@@ -1137,12 +1137,13 @@ document.getElementById('discovery-form').addEventListener('submit', async funct
       document.getElementById('progress-bar').style.width = '100%';
       document.getElementById('nav-status').textContent = 'Submitted ✓';
     } else {
-      throw new Error('Server error');
+      const errData = await resp.json().catch(() => ({}));
+      throw new Error(errData.error || `Error ${resp.status}`);
     }
   } catch (err) {
     btn.disabled = false;
-    btn.textContent = 'Send Answers →';
-    alert('Something went wrong. Please try again or email jeff@addl.co directly.');
+    btn.textContent = 'Send answers →';
+    alert('Error: ' + err.message + '\n\nOr email jeff@addl.co directly.');
   }
 });
 
