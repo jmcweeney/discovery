@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Website Discovery — Alan</title>
+<style>
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── TOKENS ── */
+:root {
+  --bg: #ffffff;
+  --ink: #111111;
+  --ink-mid: #2c2c2c;
+  --ink-light: #595959;
+  --ink-faint: #9a9a9a;
+  --border: #d9d9d9;
+  --border-focus: #111111;
+  --field-bg: #ffffff;
+  --hover-bg: #f7f7f7;
+  --section-bg: #ffffff;
+  --radius: 10px;
+  --font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #f5f5f5;
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── PROGRESS ── */
+#progress-bar {
+  position: fixed;
+  top: 0; left: 0;
+  height: 2px;
+  width: 0%;
+  background: var(--ink);
+  z-index: 200;
+  transition: width 0.2s ease;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 56px;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  z-index: 100;
+}
+
+.nav-brand {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-status {
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+.nav-submit-btn {
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--ink);
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: opacity 0.15s;
+}
+.nav-submit-btn:hover { opacity: 0.8; }
+
+/* ── LAYOUT ── */
+.wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── HERO ── */
+.hero {
+  padding-top: 96px;
+  padding-bottom: 40px;
+}
+
+.hero-kicker {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-faint);
+  margin-bottom: 16px;
+  letter-spacing: 0;
+}
+
+.hero-h1 {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.hero-h1 strong { font-weight: 700; }
+
+.hero-sub {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--ink-light);
+  line-height: 1.65;
+  max-width: 520px;
+  margin-bottom: 32px;
+}
+
+.hero-chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 12px;
+}
+
+.chip-label {
+  font-size: 11px;
+  color: var(--ink-faint);
+}
+
+.chip-value {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-mid);
+}
+
+/* ── CARD ── */
+.card {
+  background: var(--section-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  margin-bottom: 16px;
+}
+
+/* ── CONTACT CAPTURE (inside card) ── */
+.contact-strip {
+  background: var(--section-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px 32px;
+  margin-bottom: 16px;
+}
+
+.contact-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.contact-section-title {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+.contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.contact-field input {
+  font-family: var(--font);
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--field-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 13px 16px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.contact-field input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(17,17,17,0.06);
+}
+.contact-field input::placeholder { color: var(--ink-faint); }
+
+/* ── TIP ── */
+.tip {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 28px;
+  margin-bottom: 16px;
+}
+
+.tip-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+
+.tip ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tip ul li {
+  font-size: 13px;
+  color: var(--ink-light);
+  display: flex;
+  gap: 10px;
+  line-height: 1.5;
+}
+.tip ul li::before { content: '·'; color: var(--ink-faint); flex-shrink: 0; font-size: 16px; line-height: 1.3; }
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 16px;
+}
+
+.section-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.section-header {
+  padding: 28px 32px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.section-h2 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.section-desc {
+  font-size: 13px;
+  color: var(--ink-light);
+  line-height: 1.6;
+}
+
+/* ── SUB-GROUP ── */
+.sub-group {
+  padding: 24px 32px;
+  border-bottom: 1px solid var(--border);
+}
+.sub-group:last-child { border-bottom: none; }
+
+.sub-group-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+  letter-spacing: -0.01em;
+}
+
+.sub-group-hint {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-bottom: 16px;
+}
+
+/* ── CHECKLIST ── */
+.checklist { display: flex; flex-direction: column; gap: 2px; }
+
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 11px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.1s;
+  user-select: none;
+}
+.check-item:hover { background: var(--hover-bg); }
+
+.cb {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 5px;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.12s;
+  background: white;
+}
+
+.check-item.on .cb {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+.check-item.on .cb::after {
+  content: '';
+  display: block;
+  width: 9px;
+  height: 5px;
+  border-left: 1.5px solid white;
+  border-bottom: 1.5px solid white;
+  transform: rotate(-45deg) translateY(-1px);
+}
+
+.check-text { flex: 1; }
+
+.check-main {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--ink-mid);
+  line-height: 1.4;
+  transition: color 0.12s;
+}
+.check-item.on .check-main { color: var(--ink); font-weight: 500; }
+
+.check-aside {
+  font-size: 12px;
+  color: var(--ink-faint);
+  line-height: 1.4;
+  margin-top: 1px;
+}
+
+/* ── OPEN RESPONSE ── */
+.open-list { display: flex; flex-direction: column; gap: 12px; }
+
+.open-row { display: flex; flex-direction: column; gap: 6px; }
+
+.open-q {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--ink-mid);
+  line-height: 1.45;
+}
+
+.open-q span {
+  display: inline;
+  font-weight: 400;
+  color: var(--ink-faint);
+  font-size: 13px;
+}
+
+.open-a textarea {
+  width: 100%;
+  min-height: 52px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--field-bg);
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--ink);
+  resize: none;
+  outline: none;
+  line-height: 1.6;
+  padding: 12px 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.open-a textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(17,17,17,0.06);
+}
+.open-a textarea::placeholder { color: var(--ink-faint); }
+
+/* ── RANK ── */
+.rank-list { display: flex; flex-direction: column; gap: 12px; }
+
+.rank-row { display: flex; gap: 14px; align-items: flex-start; }
+
+.rank-n {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink-faint);
+  line-height: 1;
+  min-width: 20px;
+  padding-top: 14px;
+}
+
+.rank-body { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+.rank-lbl {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink-mid);
+}
+
+.rank-input {
+  width: 100%;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--field-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.rank-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(17,17,17,0.06);
+}
+.rank-input::placeholder { color: var(--ink-faint); }
+
+/* ── SUBMIT SECTION ── */
+.submit-section {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 32px;
+  margin-bottom: 40px;
+}
+
+.submit-inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 32px;
+  align-items: center;
+}
+
+.submit-heading {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  line-height: 1.3;
+  margin-bottom: 6px;
+}
+
+.submit-note {
+  font-size: 13px;
+  color: var(--ink-faint);
+  line-height: 1.6;
+}
+
+.btn-submit {
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 500;
+  background: var(--ink);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  cursor: pointer;
+  border-radius: 10px;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.btn-submit:hover { opacity: 0.8; }
+.btn-submit:disabled { opacity: 0.35; cursor: not-allowed; }
+
+/* ── SUCCESS STATE ── */
+#success-screen {
+  display: none;
+  padding: 100px 24px;
+  text-align: center;
+  max-width: 480px;
+  margin: 0 auto;
+}
+#success-screen.show { display: block; }
+
+.success-icon {
+  width: 52px;
+  height: 52px;
+  background: var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+}
+.success-icon::after {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 12px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg) translateY(-2px);
+}
+
+.success-h {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.success-p {
+  font-size: 15px;
+  color: var(--ink-light);
+  line-height: 1.7;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+}
+
+.footer-left, .footer-right {
+  font-size: 12px;
+  color: var(--ink-faint);
+}
+
+/* ── VALIDATION ── */
+.field-error { border-color: #d33 !important; }
+.error-msg { font-size: 12px; color: #d33; margin-top: 5px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  nav { padding: 0 16px; }
+  .wrap { padding: 0 16px; }
+  .card, .contact-strip, .tip, .section-header, .sub-group, .submit-section { padding: 20px; }
+  .section-header { padding: 20px 20px 16px; }
+  .contact-row { grid-template-columns: 1fr; }
+  .submit-inner { grid-template-columns: 1fr; }
+  .check-aside { display: none; }
+  footer { flex-direction: column; gap: 6px; text-align: center; }
+}
+
+@media print {
+  nav, #progress-bar { display: none; }
+  body { background: white; }
+  .hero { padding-top: 20px; }
+}
+
+/* ── FADE IN ── */
+.fade {
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.fade.in { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<nav>
+  <span class="nav-brand">Alan — Website Discovery</span>
+  <div class="nav-right">
+    <span class="nav-status" id="nav-status">0 of 7 sections touched</span>
+    <button class="nav-submit-btn" onclick="scrollToSubmit()">Submit</button>
+  </div>
+</nav>
+
+<!-- ══════════ MAIN FORM ══════════ -->
+<form id="discovery-form" action="https://formspree.io/f/REPLACE_WITH_YOUR_FORM_ID" method="POST">
+
+  <!-- Hidden fields populated by JS -->
+  <input type="hidden" name="_subject" value="Website Discovery — Alan's Answers">
+  <input type="hidden" name="_replyto" id="hidden-replyto">
+  <input type="hidden" name="answers_summary" id="hidden-summary">
+
+  <!-- ── HERO ── -->
+  <div class="wrap">
+    <section class="hero fade">
+      <div class="hero-kicker">Website Discovery Questionnaire</div>
+      <h1 class="hero-h1">Your vision.<br><strong>Our blueprint.</strong></h1>
+      <p class="hero-sub">Answer as much or as little as you like. Every detail — even a rough gut feeling — helps us design a site that works as hard as you do.</p>
+      <div class="hero-chips">
+        <div class="chip"><span class="chip-label">For</span><span class="chip-value">Alan</span></div>
+        <div class="chip"><span class="chip-label">Project</span><span class="chip-value">Service Business Website</span></div>
+        <div class="chip"><span class="chip-label">Sections</span><span class="chip-value">7</span></div>
+      </div>
+    </section>
+
+    <!-- ── TIP ── -->
+    <div class="tip fade">
+      <div class="tip-title">How to use this</div>
+      <ul>
+        <li>Check every box that reflects your vision — multiple selections encouraged.</li>
+        <li>Use the open fields to share specifics, gut feelings, or rough ideas. Nothing is too small.</li>
+        <li>If a question doesn't apply, skip it. There are no wrong answers.</li>
+        <li>Hit Submit at the bottom when you're done — answers go straight to Jeff.</li>
+      </ul>
+    </div>
+
+    <!-- ── CONTACT CAPTURE ── -->
+    <div class="contact-strip fade">
+      <div class="contact-inner">
+        <div class="contact-section-title">About you</div>
+        <div class="contact-row">
+          <div class="contact-field">
+            <input type="text" id="field-name" name="contact_name" placeholder="First name" required autocomplete="given-name">
+          </div>
+          <div class="contact-field">
+            <input type="text" name="contact_lastname" placeholder="Last name" autocomplete="family-name">
+          </div>
+        </div>
+        <div class="contact-field">
+          <input type="email" id="field-email" name="contact_email" placeholder="Email" required autocomplete="email">
+          <input type="hidden" name="_replyto" id="field-replyto">
+        </div>
+        <div class="contact-field">
+          <input type="tel" name="contact_phone" placeholder="Phone number (optional)" autocomplete="tel">
+        </div>
+        <div class="contact-field" style="margin-top:8px;">
+          <input type="text" name="contact_company" placeholder="Company / organization">
+        </div>
+      </div>
+    </div>
+
+    <!-- ════════════════════════════════
+         01 — BUSINESS & CUSTOMERS
+    ════════════════════════════════ -->
+    <section class="section fade" data-section="1">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-eyebrow">01 — Context</div>
+          <h2 class="section-h2">Your business &amp; your customers</h2>
+          <p class="section-desc">Understanding who you are and who you serve shapes every design decision.</p>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">About your business</div>
+          <div class="sub-group-hint">Answer as much as you can — rough ideas are welcome.</div>
+          <div class="open-list">
+            <div class="open-row"><div class="open-q">What services do you offer? <span>(list your top 3–5)</span></div><div class="open-a"><textarea name="q_services" placeholder="e.g. drain cleaning, water heater install, emergency plumbing…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">What geographic areas do you serve?</div><div class="open-a"><textarea name="q_geography" placeholder="Cities, counties, radius…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">Who is your typical customer?</div><div class="open-a"><textarea name="q_customer" placeholder="Homeowners, property managers, businesses…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">What makes you different from competitors?</div><div class="open-a"><textarea name="q_differentiator" placeholder="Speed, trust, specialty, guarantee…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">What's the #1 feeling a visitor should have when they land on your site?</div><div class="open-a"><textarea name="q_feeling" placeholder="Reassured, impressed, ready to call…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">Competitor sites you admire — or want nothing to do with?</div><div class="open-a"><textarea name="q_competitors" placeholder="URLs or names welcome"></textarea></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Website goals</div>
+          <div class="sub-group-hint">Check all that apply.</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Generate new customer leads</div><div class="check-aside">Contact form, call button, quote request</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Book appointments online</div><div class="check-aside">Self-schedule without calling</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Build trust &amp; credibility</div><div class="check-aside">Reviews, photos, certifications</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Showcase services clearly</div><div class="check-aside">Each service gets its own page</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Rank on Google for local searches</div><div class="check-aside">"Plumber near me", "HVAC repair [city]"</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Support existing customers</div><div class="check-aside">FAQ, tips, service reminders</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Attract employees &amp; job applicants</div><div class="check-aside">Careers section, culture statement</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Differentiate from competitors</div><div class="check-aside">Story, values, unique offer front &amp; center</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════
+         02 — LOOK & FEEL
+    ════════════════════════════════ -->
+    <section class="section fade" data-section="2">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-eyebrow">02 — Aesthetic</div>
+          <h2 class="section-h2">Look &amp; feel</h2>
+          <p class="section-desc">Aesthetics communicate trust before a single word is read. These choices set the emotional tone of your site.</p>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Overall vibe</div>
+          <div class="sub-group-hint">Check all that resonate.</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Professional &amp; polished</div><div class="check-aside">Clean lines, formal, corporate credibility</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Friendly &amp; approachable</div><div class="check-aside">Warm, conversational, neighborhood feel</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Bold &amp; confident</div><div class="check-aside">Strong colors, direct, "we get it done"</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Modern &amp; tech-forward</div><div class="check-aside">Sleek, implies latest tools and methods</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Trustworthy &amp; established</div><div class="check-aside">Classic, solid, "been around for decades"</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Energetic &amp; fast</div><div class="check-aside">Dynamic layout, implies quick response</div></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Color &amp; branding</div>
+          <div class="open-list">
+            <div class="open-row"><div class="open-q">Existing brand colors? <span>(list or note if you have a logo)</span></div><div class="open-a"><textarea name="q_colors" placeholder="Logo colors, hex codes, or 'not yet'…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">Colors you strongly like or dislike?</div><div class="open-a"><textarea name="q_color_prefs" placeholder="e.g. Love navy, hate orange…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">2–3 websites whose visual style you admire <span>(any industry)</span></div><div class="open-a"><textarea name="q_inspo" placeholder="URLs or names…"></textarea></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Photography &amp; media</div>
+          <div class="sub-group-hint">Check what you already have.</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Photos of my team</div><div class="check-aside">Real faces build trust fast</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Photos of completed work</div><div class="check-aside">Before/after, job site, finished projects</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Branded vehicle / truck</div><div class="check-aside">Great for local recognition</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Open to a photo shoot</div><div class="check-aside">Professional photos of team &amp; work</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Stock photography fallback</div><div class="check-aside">We can source quality images</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Include video</div><div class="check-aside">Intro clip, job walkthroughs, team culture</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════
+         03 — CONTENT & PAGES
+    ════════════════════════════════ -->
+    <section class="section fade" data-section="3">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-eyebrow">03 — Structure</div>
+          <h2 class="section-h2">Content &amp; pages</h2>
+          <p class="section-desc">What pages does your site need? Check every page you'd like included.</p>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Core pages</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Home Page</div><div class="check-aside">Primary first impression</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">About / Our Story</div><div class="check-aside">Team, history, values, owner bio</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Services Overview</div><div class="check-aside">Master list of all offerings</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Individual Service Pages</div><div class="check-aside">One dedicated page per service</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Service Area Page</div><div class="check-aside">Cities/counties served — critical for local SEO</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Contact Page</div><div class="check-aside">Form, phone, email, map, hours</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Testimonials / Reviews</div><div class="check-aside">Standalone page for customer praise</div></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Trust &amp; conversion</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Free Quote / Estimate Request</div><div class="check-aside">High-converting for service businesses</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Warranties &amp; Guarantees</div><div class="check-aside">What you stand behind</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Certifications &amp; Licenses</div><div class="check-aside">Display credentials prominently</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Gallery / Portfolio</div><div class="check-aside">Photo showcase of completed work</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">FAQ Page</div><div class="check-aside">Answer the 10 questions customers ask most</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Emergency / 24-Hour Service Page</div><div class="check-aside">If you offer urgent response</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Financing Options</div><div class="check-aside">If you offer payment plans</div></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Growth &amp; optional</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Blog / Tips &amp; Resources</div><div class="check-aside">Content that boosts SEO &amp; authority</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Careers / Join Our Team</div><div class="check-aside">If you're hiring or plan to</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Promotions / Coupons</div><div class="check-aside">Seasonal deals, special offers</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════
+         04 — FEATURES & FUNCTIONALITY
+    ════════════════════════════════ -->
+    <section class="section fade" data-section="4">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-eyebrow">04 — Functionality</div>
+          <h2 class="section-h2">Features &amp; functionality</h2>
+          <p class="section-desc">The interactive capabilities your site needs. Check what matters to your operations and customer experience.</p>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Lead capture &amp; communication</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Contact form (basic)</div><div class="check-aside">Routes to your inbox</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Service request / quote form</div><div class="check-aside">Detailed with service type &amp; description</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Click-to-call button</div><div class="check-aside">One tap dials on mobile</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Live chat or chatbot</div><div class="check-aside">Real-time messaging on the site</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Emergency call banner</div><div class="check-aside">Sticky header for 24/7 line</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">SMS follow-up integration</div><div class="check-aside">Auto-text when form is submitted</div></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Booking &amp; scheduling</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Online appointment booking</div><div class="check-aside">Customer picks date/time from calendar</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Service type selection at booking</div><div class="check-aside">Customer specifies what they need</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Booking confirmation email/text</div><div class="check-aside">Automated confirmation to customer</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Appointment reminders</div><div class="check-aside">Auto-reminder 24 hours before job</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Integration with existing scheduling tool</div><div class="check-aside">ServiceTitan, Housecall Pro, Jobber…</div></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Trust &amp; social proof</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Google Reviews integration</div><div class="check-aside">Pull in your star rating automatically</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Yelp / Facebook review display</div><div class="check-aside">Show ratings from multiple platforms</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Before/after photo slider</div><div class="check-aside">Interactive comparison of job results</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Awards &amp; badges display</div><div class="check-aside">BBB, Angi, HomeAdvisor, certs</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">"X years in business" badge</div><div class="check-aside">Builds instant credibility</div></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Local SEO &amp; marketing</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Google Maps embed</div><div class="check-aside">Show service area or office location</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">City / neighborhood landing pages</div><div class="check-aside">Unique pages per service area</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Blog / content publishing</div><div class="check-aside">Regular posts to improve organic ranking</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Google Analytics integration</div><div class="check-aside">Track visits, top pages, lead sources</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Facebook Pixel / ad tracking</div><div class="check-aside">Track performance from Meta campaigns</div></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Operations &amp; back-end</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Online payments / invoicing</div><div class="check-aside">Customers pay invoices online</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Integration with QuickBooks</div><div class="check-aside">Sync invoices with accounting</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Integration with field service software</div><div class="check-aside">ServiceTitan, Jobber, Housecall Pro</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Job application form</div><div class="check-aside">Online application for open positions</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════
+         05 — MOBILE & PERFORMANCE
+    ════════════════════════════════ -->
+    <section class="section fade" data-section="5">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-eyebrow">05 — Mobile</div>
+          <h2 class="section-h2">Mobile &amp; performance</h2>
+          <p class="section-desc">Over 70% of local service searches happen on mobile. These choices affect how fast and usable your site is on phones.</p>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Priorities</div>
+          <div class="sub-group-hint">Check all that matter.</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Mobile-first design priority</div><div class="check-aside">Optimized for phone before desktop</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Click-to-call prominent on mobile</div><div class="check-aside">Phone number always one tap away</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Fast load time (under 3 seconds)</div><div class="check-aside">Slow sites lose customers</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Accessibility compliance</div><div class="check-aside">Readable for users with visual impairments</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">HTTPS / secure site</div><div class="check-aside">Required for trust and Google ranking</div></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">A bit more context</div>
+          <div class="open-list">
+            <div class="open-row"><div class="open-q">What phone do you use? <span>(We'll test on the same device.)</span></div><div class="open-a"><textarea name="q_phone" placeholder="iPhone 15, Samsung Galaxy…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">Do customers mostly call, text, or use apps to book?</div><div class="open-a"><textarea name="q_booking_method" placeholder="Mostly phone calls, occasional text…"></textarea></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════
+         06 — PRIORITIES & TIMELINE
+    ════════════════════════════════ -->
+    <section class="section fade" data-section="6">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-eyebrow">06 — Timeline</div>
+          <h2 class="section-h2">Priorities &amp; timeline</h2>
+          <p class="section-desc">Help us understand what's urgent, what's nice-to-have, and how you define success.</p>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Launch must-haves</div>
+          <div class="sub-group-hint">Rank the things the site can't go live without.</div>
+          <div class="rank-list">
+            <div class="rank-row"><div class="rank-n">1</div><div class="rank-body"><div class="rank-lbl">First priority at launch</div><input class="rank-input" type="text" name="priority_1" placeholder="e.g. customers can call or request a quote immediately"></div></div>
+            <div class="rank-row"><div class="rank-n">2</div><div class="rank-body"><div class="rank-lbl">Second priority at launch</div><input class="rank-input" type="text" name="priority_2" placeholder="e.g. clear list of all services offered"></div></div>
+            <div class="rank-row"><div class="rank-n">3</div><div class="rank-body"><div class="rank-lbl">Third priority at launch</div><input class="rank-input" type="text" name="priority_3" placeholder="e.g. customer reviews visible on the home page"></div></div>
+            <div class="rank-row"><div class="rank-n">+</div><div class="rank-body"><div class="rank-lbl">Nice-to-have (can come after launch)</div><input class="rank-input" type="text" name="priority_later" placeholder="Features you'd like eventually but aren't blocking"></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Logistics</div>
+          <div class="open-list">
+            <div class="open-row"><div class="open-q">Target launch date?</div><div class="open-a"><textarea name="q_launch_date" placeholder="Within 6 weeks, by end of summer…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">Who will manage the site after launch?</div><div class="open-a"><textarea name="q_manager" placeholder="Me, a staff member, your team…"></textarea></div></div>
+          </div>
+        </div>
+
+        <div class="sub-group">
+          <div class="sub-group-title">Success metrics</div>
+          <div class="sub-group-hint">How will you know it's working?</div>
+          <div class="checklist">
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">More phone calls from new customers</div><div class="check-aside">Inbound call volume</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">More form submissions / quote requests</div><div class="check-aside">Lead volume from contact forms</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Higher Google search ranking</div><div class="check-aside">Page 1 for key service terms</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">More online bookings</div><div class="check-aside">Appointments without a phone call</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Lower cost per lead vs. current marketing</div><div class="check-aside">Better ROI than ads, postcards, etc.</div></div></div>
+            <div class="check-item" onclick="toggle(this)"><div class="cb"></div><div class="check-text"><div class="check-main">Customers mention finding you online</div><div class="check-aside">Qualitative feedback from real customers</div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════
+         07 — OPEN NOTES
+    ════════════════════════════════ -->
+    <section class="section fade" data-section="7">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-eyebrow">07 — Open</div>
+          <h2 class="section-h2">Anything else?</h2>
+          <p class="section-desc">Frustrations, inspirations, things you've always wanted but never had — it all helps.</p>
+        </div>
+
+        <div class="sub-group">
+          <div class="open-list">
+            <div class="open-row"><div class="open-q">What does your current site (if any) do well?</div><div class="open-a"><textarea name="q_current_good" placeholder="Even one thing…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">What do you hate most about your current site or competitors' sites?</div><div class="open-a"><textarea name="q_current_bad" placeholder="Hard to navigate, ugly, slow, not mobile-friendly…"></textarea></div></div>
+            <div class="open-row"><div class="open-q">A website from any industry you love?</div><div class="open-a"><textarea name="q_loved_site" placeholder="URL or name — any industry"></textarea></div></div>
+            <div class="open-row"><div class="open-q">Any other ideas, requests, or things we should know?</div><div class="open-a"><textarea name="q_other" placeholder="Nothing is too small or too obvious…"></textarea></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════
+         SUBMIT
+    ════════════════════════════════ -->
+    <div class="submit-section fade">
+      <div class="submit-inner">
+        <div>
+          <div class="submit-heading">Ready to send?</div>
+          <p class="submit-note">Your answers go directly to Jeff at jeff@addl.co. He'll review everything before your kickoff call.</p>
+        </div>
+        <button type="submit" class="btn-submit" id="submit-btn">Send answers →</button>
+      </div>
+    </div>
+
+  </div><!-- /wrap -->
+</form>
+
+<!-- ════════════════════════════════
+     SUCCESS SCREEN
+════════════════════════════════ -->
+<div id="success-screen" class="wrap">
+  <div class="success-icon"></div>
+  <h2 class="success-h">Sent. Thank you, Alan.</h2>
+  <p class="success-p">Your answers are on their way to Jeff. He'll review everything and be in touch before your kickoff call.</p>
+</div>
+
+<footer>
+  <span class="footer-left">Website Discovery — Confidential</span>
+  <span class="footer-right">© 2026 Additional Corporation</span>
+</footer>
+
+<script>
+// ── CHECKBOX TOGGLE ──
+function toggle(el) {
+  el.classList.toggle('on');
+  updateProgress();
+}
+
+// ── AUTO-EXPAND TEXTAREAS ──
+document.querySelectorAll('textarea').forEach(ta => {
+  ta.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = this.scrollHeight + 'px';
+    updateProgress();
+  });
+});
+
+document.querySelectorAll('input[type=text]').forEach(inp => {
+  inp.addEventListener('input', updateProgress);
+});
+
+// Sync email field to replyto
+document.getElementById('field-email').addEventListener('input', function() {
+  document.getElementById('field-replyto').value = this.value;
+});
+
+// ── PROGRESS ──
+function updateProgress() {
+  const checks = document.querySelectorAll('.check-item');
+  const checked = document.querySelectorAll('.check-item.on').length;
+  const areas = document.querySelectorAll('textarea');
+  const inputs = document.querySelectorAll('.rank-input');
+  const filled = [...areas, ...inputs].filter(f => f.value.trim().length > 0).length;
+  const total = areas.length + inputs.length;
+  const pct = (checked / checks.length) * 0.5 + (filled / total) * 0.5;
+  document.getElementById('progress-bar').style.width = (pct * 100) + '%';
+
+  // Update sections touched
+  let touched = 0;
+  document.querySelectorAll('section[data-section]').forEach(sec => {
+    const hasCheck = sec.querySelector('.check-item.on');
+    const hasText = [...sec.querySelectorAll('textarea, .rank-input')].some(f => f.value.trim());
+    if (hasCheck || hasText) touched++;
+  });
+  document.getElementById('nav-status').textContent = `${touched} of 7 sections touched`;
+}
+
+// ── SCROLL TO SUBMIT ──
+function scrollToSubmit() {
+  document.querySelector('.submit-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ── FORM SUBMIT ──
+document.getElementById('discovery-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+
+  // Validate contact fields
+  const name = document.getElementById('field-name');
+  const email = document.getElementById('field-email');
+  let valid = true;
+
+  [name, email].forEach(f => {
+    f.classList.remove('field-error');
+    const existing = f.parentElement.querySelector('.error-msg');
+    if (existing) existing.remove();
+  });
+
+  if (!name.value.trim()) {
+    name.classList.add('field-error');
+    const err = document.createElement('div');
+    err.className = 'error-msg';
+    err.textContent = 'Please enter your name.';
+    name.parentElement.appendChild(err);
+    valid = false;
+  }
+
+  if (!email.value.trim() || !email.value.includes('@')) {
+    email.classList.add('field-error');
+    const err = document.createElement('div');
+    err.className = 'error-msg';
+    err.textContent = 'Please enter a valid email.';
+    email.parentElement.appendChild(err);
+    valid = false;
+  }
+
+  if (!valid) {
+    document.querySelector('.contact-strip').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  // Build summary of checked items
+  let summary = `WEBSITE DISCOVERY — ${name.value.toUpperCase()}\n`;
+  summary += '='.repeat(48) + '\n\n';
+  summary += `Contact: ${name.value} <${email.value}>\n\n`;
+
+  document.querySelectorAll('section[data-section]').forEach(sec => {
+    const h2 = sec.querySelector('.section-h2');
+    if (h2) summary += `\n── ${h2.textContent.replace(/\s+/g, ' ').trim().toUpperCase()} ──\n`;
+    sec.querySelectorAll('.check-item.on .check-main').forEach(el => {
+      summary += `✓ ${el.textContent}\n`;
+    });
+  });
+
+  document.getElementById('hidden-summary').value = summary;
+  document.getElementById('field-replyto').value = email.value;
+
+  // Submit
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+
+  try {
+    const data = new FormData(this);
+    const resp = await fetch(this.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (resp.ok) {
+      document.getElementById('discovery-form').style.display = 'none';
+      const s = document.getElementById('success-screen');
+      s.classList.add('show');
+      s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('progress-bar').style.width = '100%';
+      document.getElementById('nav-status').textContent = 'Submitted ✓';
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (err) {
+    btn.disabled = false;
+    btn.textContent = 'Send Answers →';
+    alert('Something went wrong. Please try again or email jeff@addl.co directly.');
+  }
+});
+
+// ── FADE IN ON SCROLL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.07 });
+document.querySelectorAll('.fade').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
